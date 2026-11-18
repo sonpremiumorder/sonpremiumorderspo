@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -61,9 +62,26 @@
 <body>
 
 <iframe
-src="https://script.google.com/macros/s/AKfycbz4Cd25g3dHMzpPGcLgIRGRPVURbmBA5eoQMrqmHQxos0scy7bgz1wbSSnefRF7rfiWgQ/exec"
-allow="camera; microphone; geolocation">
+    id="randomWeb"
+    allow="camera; microphone; geolocation">
 </iframe>
+
+<script>
+    // Danh sách 3 Web Apps
+    const webList = [
+        "https://script.google.com/macros/s/AKfycbz4Cd25g3dHMzpPGcLgIRGRPVURbmBA5eoQMrqmHQxos0scy7bgz1wbSSnefRF7rfiWgQ/exec",
+
+        "https://script.google.com/macros/s/AKfycbz5ut_L6izOJkebaqdbQFV3-6X3niQPDk6Ub2hRcPZ-SB6qChlM1Kt3zErW6427R6FUxw/exec",
+
+        "https://script.google.com/macros/s/AKfycbzH0aZzWG4TWF53KVHJhI9Y-XqAjdqXYWWUAcWEW-4YG2lqAiGf0rMJbAp78eYDaDeXaA/exec"
+    ];
+
+    // Chọn ngẫu nhiên một Web
+    const randomIndex = Math.floor(Math.random() * webList.length);
+
+    // Hiển thị Web được chọn
+    document.getElementById("randomWeb").src = webList[randomIndex];
+</script>
 
 </body>
 </html>
