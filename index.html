@@ -68,7 +68,6 @@
             cursor: pointer;
         }
 
-        /* Tối ưu cho mobile */
         @media (max-width: 768px) {
             html, body {
                 position: fixed;
@@ -83,7 +82,6 @@
             }
         }
 
-        /* Ngăn zoom khi double-tap trên iOS */
         @media (hover: none) and (pointer: coarse) {
             input,
             textarea,
@@ -129,7 +127,6 @@
 
     createFrame();
 
-    // Chặn phím tắt F12, Ctrl+Shift+I/J/C, Ctrl+U/S, Cmd+Option+I/J/C
     window.addEventListener("keydown", function (e) {
         const key = (e.key || "").toUpperCase();
         const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
@@ -149,7 +146,6 @@
         }
     }, true);
 
-    // Dò chênh lệch kích thước khi gắn DevTools vào cửa sổ
     const threshold = 160;
     setInterval(function () {
         if (
@@ -160,7 +156,6 @@
         }
     }, 800);
 
-    // Xóa thẻ script khởi tạo khỏi DOM sau khi chạy
     const self = document.getElementById("boot-script");
     if (self) self.remove();
 })();
