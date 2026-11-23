@@ -3,8 +3,12 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
     <meta name="theme-color" content="#ffffff">
+
     <title>SƠN PREMIUM ORDER</title>
 
     <style>
@@ -31,6 +35,7 @@
             height: 100%;
             height: 100dvh;
             overflow: hidden;
+            background: #fff;
         }
 
         iframe {
@@ -114,6 +119,7 @@
 <div id="app-mount"></div>
 
 <div id="devtools-screen" class="devtools-lock">
+
     <h2>⚠️ Cảnh báo bảo mật</h2>
 
     <p>
@@ -124,6 +130,7 @@
     <button type="button" onclick="location.reload()">
         Tải lại trang
     </button>
+
 </div>
 
 <script id="boot-script">
@@ -131,16 +138,20 @@
 
     "use strict";
 
-    // LINK APPS SCRIPT ĐƯỢC MÃ HÓA BASE64
+
     const p1 = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy8=";
+
     const p2 = "QUtmeWNieTB6SW E2V2Z0V3Y3cnRzZ21jaWkxTFJ4cjF4Rm9HN2FRcT";
-    const p3 = "NFNW54aFpCYzdDUV VwTG14bFB4NTBpc05aMlNheTd4ci9leGVj";
+
+    const p3 = "NEN1cFxtbHhsUHg1MGlzTloyU2F5N3hyL2V4ZWM=";
 
     const mount = document.getElementById("app-mount");
+
     const lockScreen = document.getElementById("devtools-screen");
 
-    // NHẬN DIỆN THIẾT BỊ
+
     function isMobileDevice() {
+
         const ua = navigator.userAgent || "";
 
         const isMobileUA =
@@ -150,10 +161,10 @@
             window.matchMedia &&
             window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
-        return isMobileUA || (isCoarsePointer && window.innerWidth <= 1024);
+        return isMobileUA ||
+               (isCoarsePointer && window.innerWidth <= 1024);
     }
 
-    // TẠO IFRAME
     const frame = document.createElement("iframe");
 
     frame.setAttribute(
@@ -163,35 +174,44 @@
 
     frame.setAttribute("title", "SƠN PREMIUM ORDER");
 
-    frame.src = atob(p1) + atob(p2 + p3);
+    const appURL = atob(p1) + atob(p2 + p3);
+
+    frame.src = appURL;
 
     mount.appendChild(frame);
 
-    // TỐI ƯU KÍCH THƯỚC MÀN HÌNH
     function resizeApp() {
+
         const height = window.visualViewport
             ? window.visualViewport.height
             : window.innerHeight;
 
         mount.style.height = height + "px";
+
         frame.style.height = height + "px";
     }
 
     window.addEventListener("resize", resizeApp);
+
     window.addEventListener("orientationchange", resizeApp);
 
     if (window.visualViewport) {
-        window.visualViewport.addEventListener("resize", resizeApp);
+
+        window.visualViewport.addEventListener(
+            "resize",
+            resizeApp
+        );
+
     }
 
     resizeApp();
 
-    // CƠ CHẾ BẢO VỆ TRÊN PC / LAPTOP
     if (!isMobileDevice()) {
 
         let locked = false;
 
         function lockPage() {
+
             if (locked) return;
 
             locked = true;
@@ -201,15 +221,19 @@
             if (lockScreen) {
                 lockScreen.classList.add("active");
             }
+
         }
 
-        // CHẶN CHUỘT PHẢI
+
         document.addEventListener("contextmenu", function (e) {
+
             e.preventDefault();
+
             return false;
+
         });
 
-        // CHẶN PHÍM TẮT DEVTOOLS
+
         window.addEventListener("keydown", function (e) {
 
             const key = (e.key || "").toUpperCase();
@@ -220,7 +244,9 @@
             const mod = isMac ? e.metaKey : e.ctrlKey;
 
             if (
+
                 e.keyCode === 123 ||
+
                 key === "F12" ||
 
                 (mod && e.shiftKey &&
@@ -230,33 +256,42 @@
                     ["I", "J", "C"].includes(key)) ||
 
                 (mod && ["U", "S"].includes(key))
+
             ) {
+
                 e.preventDefault();
+
                 e.stopPropagation();
 
                 lockPage();
 
                 return false;
+
             }
 
         }, true);
 
-        // PHÁT HIỆN DEVTOOLS QUA KÍCH THƯỚC CỬA SỔ
+
         const threshold = 160;
 
-        const detector = setInterval(function () {
+        setInterval(function () {
 
             if (
+
                 window.outerWidth - window.innerWidth > threshold ||
+
                 window.outerHeight - window.innerHeight > threshold
+
             ) {
+
                 lockPage();
+
             }
 
         }, 800);
+
     }
 
-    // XÓA SCRIPT KHỞI ĐỘNG SAU KHI CHẠY
     const self = document.getElementById("boot-script");
 
     if (self) self.remove();
