@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -44,6 +43,7 @@
             height: 100%;
             height: 100dvh;
             border: none;
+            background: #fff;
             -webkit-touch-callout: none;
             -webkit-user-select: none;
         }
@@ -73,8 +73,8 @@
 
         .devtools-lock p {
             max-width: 420px;
-            line-height: 1.6;
             font-size: 14px;
+            line-height: 1.6;
         }
 
         .devtools-lock button {
@@ -138,17 +138,30 @@
 
     "use strict";
 
+    // =====================================
+    // 1. LINK GOOGLE APPS SCRIPT
+    // MÃ HÓA THÀNH 3 PHẦN BASE64
+    // =====================================
 
-   const p1 = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy8=";
+    const p1 = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5";
 
-const p2 = "QUtmeWNieTB6SW E2V2Z0V3Y3cnRzZ21jaWkxTFJ4cjF4Rm9HN2FRcT";
+    const p2 = "Y2J5MHpJYTZXZnRXdjhydHNtY2lpMUxSeHIxeEZvRzdhUXEzRW54";
 
-const p3 = "NEN1cFxtbHhsUHg1MGlzTloyU2F5N3hyL2V4ZWM=";
+    const p3 = "aFpCYzdDUVVwTG1seGxQeDUwaXNOMlpTYXk3eHIvZXhlYw==";
+
+
+    // =====================================
+    // 2. KHỞI TẠO
+    // =====================================
 
     const mount = document.getElementById("app-mount");
 
     const lockScreen = document.getElementById("devtools-screen");
 
+
+    // =====================================
+    // 3. NHẬN DIỆN THIẾT BỊ
+    // =====================================
 
     function isMobileDevice() {
 
@@ -165,6 +178,32 @@ const p3 = "NEN1cFxtbHhsUHg1MGlzTloyU2F5N3hyL2V4ZWM=";
                (isCoarsePointer && window.innerWidth <= 1024);
     }
 
+
+    // =====================================
+    // 4. GIẢI MÃ LINK
+    // =====================================
+
+    let appURL;
+
+    try {
+
+        appURL = atob(p1 + p2 + p3);
+
+    } catch (error) {
+
+        console.error("Lỗi giải mã URL:", error);
+
+        mount.innerHTML =
+            "<p style='padding:30px;text-align:center'>Không thể khởi tạo ứng dụng. Vui lòng tải lại trang.</p>";
+
+        return;
+    }
+
+
+    // =====================================
+    // 5. TẠO IFRAME
+    // =====================================
+
     const frame = document.createElement("iframe");
 
     frame.setAttribute(
@@ -172,13 +211,25 @@ const p3 = "NEN1cFxtbHhsUHg1MGlzTloyU2F5N3hyL2V4ZWM=";
         "camera; microphone; geolocation; clipboard-read; clipboard-write"
     );
 
-    frame.setAttribute("title", "SƠN PREMIUM ORDER");
+    frame.setAttribute(
+        "title",
+        "SƠN PREMIUM ORDER"
+    );
 
-    const appURL = atob(p1) + atob(p2 + p3);
+    frame.setAttribute(
+        "loading",
+        "eager"
+    );
 
     frame.src = appURL;
 
     mount.appendChild(frame);
+
+
+    // =====================================
+    // 6. TỐI ƯU MÀN HÌNH
+    // PC / LAPTOP / ANDROID / IPHONE
+    // =====================================
 
     function resizeApp() {
 
@@ -201,10 +252,14 @@ const p3 = "NEN1cFxtbHhsUHg1MGlzTloyU2F5N3hyL2V4ZWM=";
             "resize",
             resizeApp
         );
-
     }
 
     resizeApp();
+
+
+    // =====================================
+    // 7. BẢO VỆ DEVTOOLS TRÊN PC / LAPTOP
+    // =====================================
 
     if (!isMobileDevice()) {
 
@@ -221,9 +276,10 @@ const p3 = "NEN1cFxtbHhsUHg1MGlzTloyU2F5N3hyL2V4ZWM=";
             if (lockScreen) {
                 lockScreen.classList.add("active");
             }
-
         }
 
+
+        // CHẶN CHUỘT PHẢI
 
         document.addEventListener("contextmenu", function (e) {
 
@@ -233,6 +289,8 @@ const p3 = "NEN1cFxtbHhsUHg1MGlzTloyU2F5N3hyL2V4ZWM=";
 
         });
 
+
+        // CHẶN PHÍM TẮT DEVTOOLS
 
         window.addEventListener("keydown", function (e) {
 
@@ -245,9 +303,7 @@ const p3 = "NEN1cFxtbHhsUHg1MGlzTloyU2F5N3hyL2V4ZWM=";
 
             if (
 
-                e.keyCode === 123 ||
-
-                key === "F12" ||
+                e.key === "F12" ||
 
                 (mod && e.shiftKey &&
                     ["I", "J", "C"].includes(key)) ||
@@ -266,11 +322,12 @@ const p3 = "NEN1cFxtbHhsUHg1MGlzTloyU2F5N3hyL2V4ZWM=";
                 lockPage();
 
                 return false;
-
             }
 
         }, true);
 
+
+        // PHÁT HIỆN DEVTOOLS QUA KÍCH THƯỚC CỬA SỔ
 
         const threshold = 160;
 
@@ -285,16 +342,22 @@ const p3 = "NEN1cFxtbHhsUHg1MGlzTloyU2F5N3hyL2V4ZWM=";
             ) {
 
                 lockPage();
-
             }
 
         }, 800);
 
     }
 
+
+    // =====================================
+    // 8. XÓA SCRIPT KHỞI ĐỘNG
+    // =====================================
+
     const self = document.getElementById("boot-script");
 
-    if (self) self.remove();
+    if (self) {
+        self.remove();
+    }
 
 })();
 </script>
