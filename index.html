@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -21,6 +22,8 @@
             background: #f5f5f5;
             font-family: -apple-system, BlinkMacSystemFont,
                 "Segoe UI", Roboto, sans-serif;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         body {
@@ -34,7 +37,9 @@
             height: 100%;
             height: 100dvh;
             border: none;
-            background: #f5f5f5;
+            background: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
         }
 
         @supports not (height: 100dvh) {
@@ -48,7 +53,7 @@
             textarea,
             select,
             button {
-                font-size: 16px;
+                font-size: 16px !important;
             }
         }
     </style>
@@ -66,7 +71,6 @@
 <script>
 (function () {
 
-    // MÃ BẢO MẬT 1
     const _m1 = {
         key: 7,
         data: [
@@ -79,7 +83,6 @@
         ]
     };
 
-    // MÃ BẢO MẬT 2
     const _m2 = {
         key: 11,
         data: [
@@ -91,7 +94,6 @@
         ]
     };
 
-    // MÃ BẢO MẬT 3
     const _m3 = {
         key: 13,
         data: [
@@ -103,7 +105,6 @@
         ]
     };
 
-    // GIẢI MÃ TỪNG PHẦN
     function _giaiMaPhan(part) {
         return part.data
             .map(code => String.fromCharCode(code ^ part.key))
@@ -111,17 +112,92 @@
             .join("");
     }
 
-    // GHÉP 3 PHẦN THÀNH ĐƯỜNG DẪN HOÀN CHỈNH
-    const _link = 
+    const _link =
         _giaiMaPhan(_m1) +
         _giaiMaPhan(_m2) +
         _giaiMaPhan(_m3);
 
-    // TỰ ĐỘNG TẢI WEBSITE
     const frame = document.getElementById("app-frame");
 
     if (frame) {
         frame.src = _link;
+    }
+
+    const isDesktop = !window.matchMedia(
+        "(hover: none) and (pointer: coarse)"
+    ).matches;
+
+    function blockEvent(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    }
+
+    if (isDesktop) {
+
+        document.addEventListener(
+            "contextmenu",
+            blockEvent,
+            true
+        );
+
+        window.addEventListener("keydown", function(e) {
+
+            const key = (e.key || "").toUpperCase();
+            const ctrlOrMeta = e.ctrlKey || e.metaKey;
+
+            if (e.keyCode === 123 || key === "F12") {
+                return blockEvent(e);
+            }
+
+            if (
+                ctrlOrMeta &&
+                e.shiftKey &&
+                ["I", "J", "C"].includes(key)
+            ) {
+                return blockEvent(e);
+            }
+
+            if (
+                e.metaKey &&
+                e.altKey &&
+                ["I", "J", "C"].includes(key)
+            ) {
+                return blockEvent(e);
+            }
+
+            if (
+                ctrlOrMeta &&
+                ["U", "S"].includes(key)
+            ) {
+                return blockEvent(e);
+            }
+
+        }, true);
+
+        const threshold = 160;
+
+        setInterval(function() {
+
+            if (!frame) return;
+
+            const widthDiff =
+                window.outerWidth - window.innerWidth;
+
+            const heightDiff =
+                window.outerHeight - window.innerHeight;
+
+            if (
+                widthDiff > threshold ||
+                heightDiff > threshold
+            ) {
+                frame.style.display = "none";
+            } else {
+                frame.style.display = "block";
+            }
+
+        }, 1000);
+
     }
 
 })();
