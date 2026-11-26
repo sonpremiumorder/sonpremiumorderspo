@@ -74,6 +74,18 @@
             display: flex;
         }
 
+        body.is-hard-locked,
+        body.is-hard-locked * {
+            pointer-events: none !important;
+            user-select: none !important;
+            -webkit-user-select: none !important;
+        }
+
+        body.is-hard-locked #security-lock,
+        body.is-hard-locked #security-lock * {
+            pointer-events: auto !important;
+        }
+
         .security-box {
             width: 100%;
             max-width: 420px;
@@ -150,6 +162,7 @@
 
 <script>
 (function () {
+    const LOCK_STORAGE_KEY = "SPO_SECURITY_LOCKED_V1";
 
     const _m1 = {
         key: 7,
@@ -192,17 +205,8 @@
             .join("");
     }
 
-    const _link =
-        _giaiMaPhan(_m1) +
-        _giaiMaPhan(_m2) +
-        _giaiMaPhan(_m3);
-
     const frame = document.getElementById("app-frame");
     const lockScreen = document.getElementById("security-lock");
-
-    if (frame) {
-        frame.src = _link;
-    }
 
     const isDesktop = !window.matchMedia(
         "(hover: none) and (pointer: coarse)"
@@ -210,15 +214,31 @@
 
     let violationDetected = false;
     let warningShown = false;
+    let monitorTimer = null;
+
+    function isAlreadyLocked() {
+        try {
+            return sessionStorage.getItem(LOCK_STORAGE_KEY) === "1";
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function markLocked() {
+        try {
+            sessionStorage.setItem(LOCK_STORAGE_KEY, "1");
+        } catch (e) {}
+    }
 
     function blockEvent(e) {
+        if (!e) return false;
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
         return false;
     }
 
-    function destroyFrame() {
+    function purgeDomKeepLockOnly() {
         const currentFrame = document.getElementById("app-frame") || frame;
         if (currentFrame) {
             currentFrame.style.display = "none";
@@ -226,23 +246,34 @@
             currentFrame.src = "about:blank";
             currentFrame.remove();
         }
-    }
 
-    function showWarning() {
-
-        if (violationDetected) return;
-
-        violationDetected = true;
-
-        destroyFrame();
-
-        if (lockScreen) {
-            lockScreen.classList.add("active");
+        if (monitorTimer) {
+            clearInterval(monitorTimer);
+            monitorTimer = null;
         }
 
-        if (!warningShown) {
-            warningShown = true;
+        if (document.body) {
+            document.body.classList.add("is-hard-locked");
+            if (lockScreen) {
+                Array.from(document.body.children).forEach(child => {
+                    if (child !== lockScreen) {
+                        child.remove();
+                    }
+                });
+                lockScreen.classList.add("active");
+            }
+        }
+    }
 
+    function showWarning(skipAlert) {
+        markLocked();
+        purgeDomKeepLockOnly();
+
+        if (violationDetected) return;
+        violationDetected = true;
+
+        if (!skipAlert && !warningShown) {
+            warningShown = true;
             alert(
                 "SƠN PREMIUM ORDER\n\n" +
                 "CẢNH BÁO BẢO MẬT!\n\n" +
@@ -251,6 +282,42 @@
                 "Phiên truy cập đã bị khóa."
             );
         }
+    }
+
+    function bindHardLockListeners() {
+        const hardBlockedEvents = [
+            "keydown",
+            "keyup",
+            "keypress",
+            "mousedown",
+            "mouseup",
+            "click",
+            "dblclick",
+            "contextmenu",
+            "dragstart",
+            "selectstart",
+            "wheel"
+        ];
+
+        hardBlockedEvents.forEach(evName => {
+            window.addEventListener(evName, function (e) {
+                if (violationDetected || isAlreadyLocked()) {
+                    return blockEvent(e);
+                }
+            }, true);
+        });
+    }
+
+    bindHardLockListeners();
+
+    if (isDesktop && isAlreadyLocked()) {
+        showWarning(true);
+    } else if (frame) {
+        const _link =
+            _giaiMaPhan(_m1) +
+            _giaiMaPhan(_m2) +
+            _giaiMaPhan(_m3);
+        frame.src = _link;
     }
 
     if (isDesktop) {
@@ -294,15 +361,15 @@
 
                 if (devTools) {
                     blockEvent(e);
-                    showWarning();
+                    showWarning(false);
                     return;
                 }
 
-                if (violationDetected || reloadKeys) {
+                if (violationDetected || isAlreadyLocked() || reloadKeys) {
                     blockEvent(e);
 
                     if (reloadKeys) {
-                        showWarning();
+                        showWarning(false);
                     }
 
                     return;
@@ -316,7 +383,7 @@
             "beforeunload",
             function(e) {
 
-                if (violationDetected) {
+                if (violationDetected || isAlreadyLocked()) {
                     e.preventDefault();
                     e.returnValue = "";
                 }
@@ -326,9 +393,12 @@
 
         const threshold = 160;
 
-        setInterval(function() {
+        monitorTimer = setInterval(function() {
 
-            if (violationDetected) return;
+            if (violationDetected || isAlreadyLocked()) {
+                purgeDomKeepLockOnly();
+                return;
+            }
 
             const widthDiff =
                 window.outerWidth - window.innerWidth;
@@ -340,7 +410,7 @@
                 widthDiff > threshold ||
                 heightDiff > threshold
             ) {
-                showWarning();
+                showWarning(false);
             }
 
         }, 1000);
