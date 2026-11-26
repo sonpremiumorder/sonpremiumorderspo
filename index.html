@@ -1,11 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#f5f5f5">
-    <meta name="description" content="SƠN PREMIUM ORDER">
     <title>SƠN PREMIUM ORDER</title>
 
     <style>
@@ -58,51 +56,76 @@
 
 <body>
 
-    <iframe
-        id="app-frame"
-        title="SƠN PREMIUM ORDER"
-        allow="camera; microphone; geolocation"
-        referrerpolicy="strict-origin-when-cross-origin">
-    </iframe>
+<iframe
+    id="app-frame"
+    title="SƠN PREMIUM ORDER"
+    allow="camera; microphone; geolocation"
+    referrerpolicy="strict-origin-when-cross-origin">
+</iframe>
 
-    <script>
-    (function () {
+<script>
+(function () {
 
-        // URL được mã hóa XOR và đảo ngược
-        const _key = 37;
+    // MÃ BẢO MẬT 1
+    const _m1 = {
+        key: 7,
+        data: [
+            97, 76, 70, 40, 116, 40, 116, 104,
+            117, 100, 102, 106, 40, 106, 104,
+            100, 41, 98, 107, 96, 104, 104,
+            96, 41, 115, 119, 110, 117, 100,
+            116, 40, 40, 61, 116, 119, 115,
+            115, 111
+        ]
+    };
 
-        const _data = [
-            90, 66, 75, 66, 94, 72, 91, 67, 91, 80,
-            82, 73, 91, 67, 66, 90, 94, 67, 66, 91,
-            74, 75, 80, 91, 80, 87, 87, 72, 73, 91,
-            72, 73, 81, 82, 72, 80, 66, 91, 66, 90,
-            74, 91, 88, 73, 72, 82, 66, 91, 73, 73,
-            91, 82, 90, 67, 75, 82, 90, 82, 87, 90,
-            80, 87, 87, 74, 90, 75, 72, 87, 90, 91,
-            75, 72, 66, 75, 87, 73, 67, 90, 80, 75,
-            87, 80, 88, 82, 73, 90, 82, 75, 80, 80,
-            73, 90, 82, 66, 73, 91, 66, 80, 80, 90,
-            73, 87, 80, 90, 80, 90, 75, 75, 75, 73,
-            82, 80, 73, 66
-        ];
+    // MÃ BẢO MẬT 2
+    const _m2 = {
+        key: 11,
+        data: [
+            97, 94, 110, 126, 89, 90, 74, 120,
+            84, 58, 99, 88, 127, 51, 67, 90,
+            84, 59, 51, 104, 62, 101, 102, 121,
+            127, 95, 66, 57, 77, 64, 51, 103,
+            92, 78, 114, 105, 104, 114
+        ]
+    };
 
-        // Giải mã URL
-        const _url = _data
-            .map(function (code) {
-                return String.fromCharCode(code ^ _key);
-            })
+    // MÃ BẢO MẬT 3
+    const _m3 = {
+        key: 13,
+        data: [
+            110, 104, 117, 104, 34, 122, 107,
+            102, 127, 119, 92, 60, 60, 98, 85,
+            105, 121, 73, 64, 61, 85, 76, 98,
+            106, 92, 99, 71, 72, 91, 98, 99,
+            94, 84, 92, 116, 66, 64, 107
+        ]
+    };
+
+    // GIẢI MÃ TỪNG PHẦN
+    function _giaiMaPhan(part) {
+        return part.data
+            .map(code => String.fromCharCode(code ^ part.key))
             .reverse()
             .join("");
+    }
 
-        // Tải website
-        const _frame = document.getElementById("app-frame");
+    // GHÉP 3 PHẦN THÀNH ĐƯỜNG DẪN HOÀN CHỈNH
+    const _link = 
+        _giaiMaPhan(_m1) +
+        _giaiMaPhan(_m2) +
+        _giaiMaPhan(_m3);
 
-        if (_frame) {
-            _frame.src = _url;
-        }
+    // TỰ ĐỘNG TẢI WEBSITE
+    const frame = document.getElementById("app-frame");
 
-    })();
-    </script>
+    if (frame) {
+        frame.src = _link;
+    }
+
+})();
+</script>
 
 </body>
 </html>
