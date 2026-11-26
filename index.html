@@ -10,6 +10,7 @@
         * {
             margin: 0;
             padding: 0;
+            border: 0;
             box-sizing: border-box;
         }
 
@@ -72,23 +73,32 @@
 
 <script>
 (function () {
-    const _key = 3;
-    const _codes = [
-        107,119,119,115,118,61,50,50,118,102,117,108,115,119,49,106,114,114,112,49,110,100,114,111,118,50,118,50,50,116,102,115,117,112,115,103,114,50,112,114,114,114,118,125,68,124,105,127,108,72,84,114,111,103,82,117,114,114,114,103,80,104,113,108,82,102,112,120,103,107,120,85,117,100,118,108,112,107,111,83,102,83,98,113,118,107,119,52,114,52,114,118,114,117,102,108,100,114,50,114,118,104,111,112,112,106,50,119,115,115,119,115
+    // 1. Giải mã ẩn link Web App bằng khóa XOR (không chứa chuỗi link rõ trong code)
+    const _k = [83, 79, 78, 80, 82, 69, 77, 73, 85, 77];
+    const _d = [
+        59, 58, 63, 62, 57, 119, 127, 126, 32, 47, 55, 62, 46, 54, 49, 124,
+        59, 60, 44, 126, 61, 43, 52, 62, 36, 125, 36, 124, 127, 63, 45, 57,
+        46, 54, 49, 44, 61, 125, 44, 62, 57, 61, 36, 48, 25, 19, 46, 48,
+        53, 21, 7, 36, 48, 46, 19, 58, 36, 48, 62, 46, 23, 53, 55, 60,
+        19, 54, 62, 32, 42, 44, 46, 20, 46, 46, 47, 45, 44, 59, 54, 22,
+        42, 30, 56, 43, 38, 53, 47, 121, 56, 121, 61, 38, 60, 46, 44, 45,
+        46, 57, 121, 56, 34, 49, 44, 54, 62, 36, 127, 60, 56, 43, 61, 56
     ];
 
-    function _getTargetUrl() {
-        return _codes
-            .map(c => String.fromCharCode(c - _key))
-            .reverse()
-            .join("");
+    function _unlock() {
+        let out = "";
+        for (let i = 0; i < _d.length; i++) {
+            out += String.fromCharCode(_d[i] ^ _k[i % _k.length]);
+        }
+        return out;
     }
 
     const frame = document.getElementById("app-frame");
     if (frame) {
-        frame.src = _getTargetUrl();
+        frame.src = _unlock();
     }
 
+    // 2. Chặn F12, phím tắt DevTools và chuột phải trên máy tính
     const isDesktop = !window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
     function blockEvent(e) {
