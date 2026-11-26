@@ -218,15 +218,23 @@
         return false;
     }
 
+    function destroyFrame() {
+        const currentFrame = document.getElementById("app-frame") || frame;
+        if (currentFrame) {
+            currentFrame.style.display = "none";
+            currentFrame.removeAttribute("src");
+            currentFrame.src = "about:blank";
+            currentFrame.remove();
+        }
+    }
+
     function showWarning() {
 
         if (violationDetected) return;
 
         violationDetected = true;
 
-        if (frame) {
-            frame.style.display = "none";
-        }
+        destroyFrame();
 
         if (lockScreen) {
             lockScreen.classList.add("active");
@@ -279,7 +287,6 @@
 
                 const reloadKeys =
                     key === "F5" ||
-                    key === "F5" ||
                     (
                         ctrlOrMeta &&
                         key === "R"
@@ -321,7 +328,7 @@
 
         setInterval(function() {
 
-            if (!frame || violationDetected) return;
+            if (violationDetected) return;
 
             const widthDiff =
                 window.outerWidth - window.innerWidth;
