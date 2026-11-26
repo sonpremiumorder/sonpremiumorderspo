@@ -1,366 +1,380 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SƠN PREMIUM ORDER - HG SƠN</title>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <style>
+    :root {
+      --bg-page: #f4f4f6;
+      --bg-card: #ffffff;
+      --bg-soft-gray: #f8f8fa;
+      --tiktok-red: #fe2c55;
+      --tiktok-red-dark: #e11d48;
+      --tiktok-cyan: #25f4ee;
+      --tiktok-black: #161823;
+      --gold-vip: #eab308;
+      --text-main: #161823;
+      --text-sub: #737580;
+      --border-light: #ececee;
+      --zalo-blue: #0068ff;
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+      --dd-shell-bg: linear-gradient(180deg, #ffffff 0%, #f6f6f8 22%, #f2f2f5 100%);
+      --dd-accent: #fe2c55;
+      --dd-accent-dark: #e11d48;
+      --dd-accent-soft: #fff1f4;
+      --dd-accent-border: rgba(254, 44, 85, 0.25);
+      --dd-btn-grad: linear-gradient(135deg, #fe2c55 0%, #e11d48 100%);
+      --dd-btn-shadow: 0 6px 18px rgba(254, 44, 85, 0.28);
+      --dd-avatar-grad: linear-gradient(135deg, #fe2c55, #161823);
+      --dd-card-bg: #ffffff;
+      --dd-card-border: #ececee;
+      --dd-card-shadow: 0 4px 14px rgba(22, 24, 35, 0.04);
+      --dd-excel-bg: #161823;
+      --dd-excel-shadow: 0 3px 8px rgba(22, 24, 35, 0.15);
+      --dd-nav-bg: #ffffff;
+      --dd-nav-border: #ececee;
+      --dd-center-bg: #161823;
+      --dd-center-shadow: -3.5px 0 0 #25f4ee, 3.5px 0 0 #fe2c55;
 
-    <meta name="theme-color" content="#ffffff">
+      --htms-shell-bg: linear-gradient(180deg, #f0f7ff 0%, #f8fafc 35%, #eef2f6 100%);
+      --htms-accent: #0068ff;
+      --htms-accent-dark: #0052cc;
+      --htms-accent-soft: #eff6ff;
+      --htms-accent-border: #bfdbfe;
+      --htms-grad: linear-gradient(135deg, #0068ff 0%, #00b1ff 100%);
+      --htms-card-bg: #ffffff;
+      --htms-card-border: #e2e8f0;
+      --htms-card-shadow: 0 4px 20px -2px rgba(0, 104, 255, 0.06);
+      --htms-nav-bg: #ffffff;
+      --htms-nav-border: #ececee;
+      --htms-center-shadow: 0 4px 12px rgba(0, 104, 255, 0.3);
+    }
 
-    <title>SƠN PREMIUM ORDER</title>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Be Vietnam Pro', sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: #e5e5ea; color: var(--text-main); min-height: 100vh; overflow-x: hidden; position: relative; font-size: 13px; }
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    .app-shell {
+      max-width: 440px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: var(--dd-shell-bg);
+      position: relative;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.08);
+    }
 
-        html, body {
-            width: 100%;
-            height: 100%;
-            height: 100dvh;
-            overflow: hidden;
-            background: #f5f5f5;
-            font-family: -apple-system, BlinkMacSystemFont,
-                         'Segoe UI', Roboto, sans-serif;
-        }
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 22px;
+      background: linear-gradient(180deg, #ffffff 0%, #fff1f4 48%, #f4f4f6 100%);
+    }
 
-        #app-mount {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            height: 100dvh;
-            overflow: hidden;
-            background: #fff;
-        }
+    .login-hero-card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 26px 20px;
+      box-shadow: 0 12px 35px rgba(22, 24, 35, 0.07);
+      border: 1px solid #f0f0f3;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
 
-        iframe {
-            display: block;
-            width: 100%;
-            height: 100%;
-            height: 100dvh;
-            border: none;
-            background: #fff;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-        }
+    .login-hero-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--tiktok-cyan), var(--tiktok-red));
+    }
 
-        .devtools-lock {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 999999;
-            background: #111827;
-            color: #ffffff;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 24px;
-            flex-direction: column;
-            gap: 14px;
-        }
+    .brand-title-static { font-size: 18px; font-weight: 900; color: var(--tiktok-black); letter-spacing: 0.5px; }
+    .brand-sub { font-size: 11.5px; color: var(--text-sub); margin-top: 3px; font-weight: 500; margin-bottom: 18px; }
 
-        .devtools-lock.active {
-            display: flex;
-        }
+    .input-group { margin-bottom: 12px; text-align: left; }
+    .input-group label { display: block; font-size: 11.5px; font-weight: 700; color: var(--tiktok-black); margin-bottom: 5px; }
+    .input-wrapper { position: relative; display: flex; align-items: center; }
+    .input-wrapper > i.input-icon-left { position: absolute; left: 13px; color: var(--tiktok-red); font-size: 13.5px; pointer-events: none; }
+    .input-wrapper input {
+      width: 100%;
+      padding: 10.5px 38px 10.5px 36px;
+      border-radius: 14px;
+      border: 1.5px solid #e4e4e7;
+      background: #f9f9fb;
+      font-size: 13px;
+      color: var(--tiktok-black);
+      outline: none;
+      transition: all 0.2s;
+    }
+    .input-wrapper input:focus { border-color: var(--tiktok-red); background: #ffffff; box-shadow: 0 0 0 3px rgba(254, 44, 85, 0.1); }
+    .toggle-pass-btn { position: absolute; right: 12px; background: none; border: none; color: var(--text-sub); cursor: pointer; padding: 4px; font-size: 14px; }
 
-        .devtools-lock h2 {
-            font-size: 22px;
-        }
+    .remember-row { display: flex; align-items: center; justify-content: space-between; margin: 2px 0 12px; padding: 0 2px; font-size: 11.5px; gap: 8px; }
+    .remember-label { display: inline-flex; align-items: center; gap: 7px; cursor: pointer; font-weight: 700; color: var(--tiktok-black); user-select: none; }
+    .remember-label input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--tiktok-red); cursor: pointer; }
+    .cred-actions { display: inline-flex; align-items: center; gap: 8px; }
+    .btn-cred-link { background: none; border: none; color: #2563eb; font-size: 11px; font-weight: 700; cursor: pointer; text-decoration: underline; }
+    .btn-clear-saved-creds { background: none; border: none; color: var(--text-sub); font-size: 11px; font-weight: 700; cursor: pointer; text-decoration: underline; display: none; }
+    .btn-clear-saved-creds:hover { color: var(--tiktok-red); }
 
-        .devtools-lock p {
-            max-width: 420px;
-            font-size: 14px;
-            line-height: 1.6;
-        }
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #fe2c55 0%, #e11d48 100%);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(254, 44, 85, 0.28);
+      margin-top: 4px;
+    }
 
-        .devtools-lock button {
-            margin-top: 6px;
-            padding: 12px 22px;
-            border: none;
-            border-radius: 8px;
-            background: #2563eb;
-            color: #fff;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 15px;
-        }
-
-        @media (max-width: 768px) {
-            html, body {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-            }
-
-            iframe {
-                height: 100dvh;
-            }
-        }
-
-        @media (hover: none) and (pointer: coarse) {
-            input,
-            textarea,
-            select,
-            button {
-                font-size: 16px !important;
-            }
-        }
-    </style>
+    .error-msg { color: var(--tiktok-red); font-size: 11.5px; margin-top: 8px; text-align: center; font-weight: 600; min-height: 16px; }
+    .toast-alert {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-60px);
+      background: #161823;
+      color: #ffffff;
+      padding: 9px 18px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      z-index: 6000;
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .toast-alert.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  </style>
 </head>
-
 <body>
+  <div class="toast-alert" id="toastAlert"><i class="fa-solid fa-circle-check" style="color:#25f4ee;"></i> <span id="toastText"></span></div>
 
-<div id="app-mount"></div>
+  <div class="app-shell" id="mainAppShell">
+    <div id="loginScreen">
+      <div class="login-hero-card">
+        <div class="brand-title-static">SƠN PREMIUM ORDER</div>
+        <div class="brand-sub">Hệ thống tra cứu & Đặt đơn hàng</div>
 
-<div id="devtools-screen" class="devtools-lock">
+        <form id="loginForm" autocomplete="on" onsubmit="event.preventDefault(); handleLogin();">
+          <div class="input-group">
+            <label for="loginId">ID Đăng nhập (Nickname / Tên Zalo / ID Zalo / User ID)</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-user input-icon-left"></i>
+              <input type="text" id="loginId" name="username" autocomplete="username" placeholder="Nhập Nickname, Tên Zalo, ID Zalo hoặc User ID...">
+            </div>
+          </div>
 
-    <h2>⚠️ Cảnh báo bảo mật</h2>
+          <div class="input-group">
+            <label for="loginPass">Mật khẩu</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-lock input-icon-left"></i>
+              <input type="password" id="loginPass" name="password" autocomplete="current-password" placeholder="Nhập mật khẩu...">
+              <button type="button" class="toggle-pass-btn" onclick="togglePasswordVisibility('loginPass', this)">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+          </div>
 
-    <p>
-        Vui lòng đóng công cụ nhà phát triển (DevTools)
-        trên máy tính để tiếp tục sử dụng SƠN PREMIUM ORDER.
-    </p>
+          <div class="remember-row">
+            <label class="remember-label">
+              <input type="checkbox" id="rememberCredsCheckbox" checked onchange="onRememberCheckboxChange()">
+              <span>Lưu ID & Mật khẩu</span>
+            </label>
+            <div class="cred-actions">
+              <button type="button" id="btnAutofillSavedCreds" class="btn-cred-link" style="display:none;" onclick="applySavedCredentialsToForm(true)">Tự động điền</button>
+              <button type="button" id="btnClearSavedCreds" class="btn-clear-saved-creds" onclick="clearSavedCredentials()">Xóa lưu</button>
+            </div>
+          </div>
 
-    <button type="button" onclick="location.reload()">
-        Tải lại trang
-    </button>
+          <button type="submit" class="btn-primary" id="btnLogin">ĐĂNG NHẬP</button>
+        </form>
 
-</div>
+        <div class="error-msg" id="loginError"></div>
+      </div>
+    </div>
+  </div>
 
-<script id="boot-script">
-(function () {
+  <script>
+    const SAVED_CREDS_STORAGE_KEY = 'SPO_SAVED_CREDENTIALS_V1';
+    const SAVED_CREDS_PREF_KEY = 'SPO_REMEMBER_CREDS_PREF_V1';
 
-    "use strict";
-
-    // =====================================
-    // 1. LINK GOOGLE APPS SCRIPT
-    // MÃ HÓA THÀNH 3 PHẦN BASE64
-    // =====================================
-
-    const p1 = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5";
-
-    const p2 = "Y2J5MHpJYTZXZnRXdjhydHNtY2lpMUxSeHIxeEZvRzdhUXEzRW54";
-
-    const p3 = "aFpCYzdDUVVwTG1seGxQeDUwaXNOMlpTYXk3eHIvZXhlYw==";
-
-
-    // =====================================
-    // 2. KHỞI TẠO
-    // =====================================
-
-    const mount = document.getElementById("app-mount");
-
-    const lockScreen = document.getElementById("devtools-screen");
-
-
-    // =====================================
-    // 3. NHẬN DIỆN THIẾT BỊ
-    // =====================================
-
-    function isMobileDevice() {
-
-        const ua = navigator.userAgent || "";
-
-        const isMobileUA =
-            /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(ua);
-
-        const isCoarsePointer =
-            window.matchMedia &&
-            window.matchMedia("(hover: none) and (pointer: coarse)").matches;
-
-        return isMobileUA ||
-               (isCoarsePointer && window.innerWidth <= 1024);
+    function showToast(msg) {
+      const toast = document.getElementById('toastAlert');
+      const textEl = document.getElementById('toastText');
+      if (textEl) textEl.innerText = msg || '';
+      toast.classList.add('show');
+      setTimeout(() => { toast.classList.remove('show'); }, 2200);
     }
 
-
-    // =====================================
-    // 4. GIẢI MÃ LINK
-    // =====================================
-
-    let appURL;
-
-    try {
-
-        appURL = atob(p1 + p2 + p3);
-
-    } catch (error) {
-
-        console.error("Lỗi giải mã URL:", error);
-
-        mount.innerHTML =
-            "<p style='padding:30px;text-align:center'>Không thể khởi tạo ứng dụng. Vui lòng tải lại trang.</p>";
-
-        return;
+    function encodeCredentials(userId, password) {
+      const payload = JSON.stringify({ u: String(userId || ''), p: String(password || ''), ts: Date.now() });
+      const bytes = new TextEncoder().encode(payload);
+      let bin = '';
+      for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+      return btoa(bin);
     }
 
-
-    // =====================================
-    // 5. TẠO IFRAME
-    // =====================================
-
-    const frame = document.createElement("iframe");
-
-    frame.setAttribute(
-        "allow",
-        "camera; microphone; geolocation; clipboard-read; clipboard-write"
-    );
-
-    frame.setAttribute(
-        "title",
-        "SƠN PREMIUM ORDER"
-    );
-
-    frame.setAttribute(
-        "loading",
-        "eager"
-    );
-
-    frame.src = appURL;
-
-    mount.appendChild(frame);
-
-
-    // =====================================
-    // 6. TỐI ƯU MÀN HÌNH
-    // PC / LAPTOP / ANDROID / IPHONE
-    // =====================================
-
-    function resizeApp() {
-
-        const height = window.visualViewport
-            ? window.visualViewport.height
-            : window.innerHeight;
-
-        mount.style.height = height + "px";
-
-        frame.style.height = height + "px";
-    }
-
-    window.addEventListener("resize", resizeApp);
-
-    window.addEventListener("orientationchange", resizeApp);
-
-    if (window.visualViewport) {
-
-        window.visualViewport.addEventListener(
-            "resize",
-            resizeApp
-        );
-    }
-
-    resizeApp();
-
-
-    // =====================================
-    // 7. BẢO VỆ DEVTOOLS TRÊN PC / LAPTOP
-    // =====================================
-
-    if (!isMobileDevice()) {
-
-        let locked = false;
-
-        function lockPage() {
-
-            if (locked) return;
-
-            locked = true;
-
-            mount.innerHTML = "";
-
-            if (lockScreen) {
-                lockScreen.classList.add("active");
-            }
+    function decodeCredentials(encodedStr) {
+      if (!encodedStr) return null;
+      try {
+        const bin = atob(encodedStr);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        const parsed = JSON.parse(new TextDecoder().decode(bytes));
+        if (parsed && (parsed.u || parsed.p)) {
+          return { userId: String(parsed.u || ''), password: String(parsed.p || '') };
         }
-
-
-        // CHẶN CHUỘT PHẢI
-
-        document.addEventListener("contextmenu", function (e) {
-
-            e.preventDefault();
-
-            return false;
-
-        });
-
-
-        // CHẶN PHÍM TẮT DEVTOOLS
-
-        window.addEventListener("keydown", function (e) {
-
-            const key = (e.key || "").toUpperCase();
-
-            const isMac =
-                navigator.platform.toUpperCase().indexOf("MAC") >= 0;
-
-            const mod = isMac ? e.metaKey : e.ctrlKey;
-
-            if (
-
-                e.key === "F12" ||
-
-                (mod && e.shiftKey &&
-                    ["I", "J", "C"].includes(key)) ||
-
-                (isMac && e.metaKey && e.altKey &&
-                    ["I", "J", "C"].includes(key)) ||
-
-                (mod && ["U", "S"].includes(key))
-
-            ) {
-
-                e.preventDefault();
-
-                e.stopPropagation();
-
-                lockPage();
-
-                return false;
-            }
-
-        }, true);
-
-
-        // PHÁT HIỆN DEVTOOLS QUA KÍCH THƯỚC CỬA SỔ
-
-        const threshold = 160;
-
-        setInterval(function () {
-
-            if (
-
-                window.outerWidth - window.innerWidth > threshold ||
-
-                window.outerHeight - window.innerHeight > threshold
-
-            ) {
-
-                lockPage();
-            }
-
-        }, 800);
-
+      } catch (e) {}
+      return null;
     }
 
-
-    // =====================================
-    // 8. XÓA SCRIPT KHỞI ĐỘNG
-    // =====================================
-
-    const self = document.getElementById("boot-script");
-
-    if (self) {
-        self.remove();
+    function getSavedCredentials() {
+      try {
+        const raw = localStorage.getItem(SAVED_CREDS_STORAGE_KEY);
+        return decodeCredentials(raw);
+      } catch (e) {
+        return null;
+      }
     }
 
-})();
-</script>
+    function updateSavedCredsButtons() {
+      const saved = getSavedCredentials();
+      const hasSaved = Boolean(saved && (saved.userId || saved.password));
+      const btnClear = document.getElementById('btnClearSavedCreds');
+      const btnFill = document.getElementById('btnAutofillSavedCreds');
+      if (btnClear) btnClear.style.display = hasSaved ? 'inline-block' : 'none';
+      if (btnFill) btnFill.style.display = hasSaved ? 'inline-block' : 'none';
+    }
 
+    function saveCredentialsIfChecked(userId, password) {
+      const cb = document.getElementById('rememberCredsCheckbox');
+      const shouldSave = cb ? Boolean(cb.checked) : true;
+      try { localStorage.setItem(SAVED_CREDS_PREF_KEY, shouldSave ? '1' : '0'); } catch (e) {}
+
+      if (!shouldSave) {
+        clearSavedCredentials(false);
+        return;
+      }
+      try {
+        localStorage.setItem(SAVED_CREDS_STORAGE_KEY, encodeCredentials(userId, password));
+      } catch (e) {}
+      updateSavedCredsButtons();
+    }
+
+    function clearSavedCredentials(showNotice = true) {
+      try { localStorage.removeItem(SAVED_CREDS_STORAGE_KEY); } catch (e) {}
+      updateSavedCredsButtons();
+      if (showNotice) showToast('Đã xóa ID & Mật khẩu đã lưu!');
+    }
+
+    function onRememberCheckboxChange() {
+      const cb = document.getElementById('rememberCredsCheckbox');
+      const shouldSave = cb ? Boolean(cb.checked) : true;
+      try { localStorage.setItem(SAVED_CREDS_PREF_KEY, shouldSave ? '1' : '0'); } catch (e) {}
+      if (!shouldSave) {
+        clearSavedCredentials(false);
+      } else {
+        const curId = document.getElementById('loginId').value.trim();
+        const curPass = document.getElementById('loginPass').value;
+        if (curId && curPass) saveCredentialsIfChecked(curId, curPass);
+      }
+    }
+
+    function applySavedCredentialsToForm(notify = false) {
+      const saved = getSavedCredentials();
+      if (!saved) return false;
+      const idInput = document.getElementById('loginId');
+      const passInput = document.getElementById('loginPass');
+      if (idInput && saved.userId) idInput.value = saved.userId;
+      if (passInput && saved.password) passInput.value = saved.password;
+      updateSavedCredsButtons();
+      if (notify) showToast('Đã tự động điền ID & Mật khẩu!');
+      return true;
+    }
+
+    function initSavedCredentialsUI() {
+      try {
+        const pref = localStorage.getItem(SAVED_CREDS_PREF_KEY);
+        const cb = document.getElementById('rememberCredsCheckbox');
+        if (cb && pref === '0') cb.checked = false;
+      } catch (e) {}
+      applySavedCredentialsToForm(false);
+      updateSavedCredsButtons();
+    }
+
+    function togglePasswordVisibility(inputId, btnEl) {
+      const input = document.getElementById(inputId);
+      const icon = btnEl.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fa-regular fa-eye-slash';
+      } else {
+        input.type = 'password';
+        icon.className = 'fa-regular fa-eye';
+      }
+    }
+
+    function handleLogin() {
+      const id = document.getElementById('loginId').value.trim();
+      const pass = document.getElementById('loginPass').value.trim();
+      const errEl = document.getElementById('loginError');
+      const btn = document.getElementById('btnLogin');
+
+      if (!id || !pass) {
+        errEl.innerText = 'Vui lòng nhập đầy đủ ID và Mật khẩu!';
+        return;
+      }
+
+      errEl.innerText = '';
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ĐANG KIỂM TRA...';
+
+      saveCredentialsIfChecked(id, pass);
+
+      if (window.google && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(function(res) {
+            btn.disabled = false;
+            btn.innerText = 'ĐĂNG NHẬP';
+            if (res && res.success) {
+              saveCredentialsIfChecked(id, pass);
+              showToast('Đăng nhập thành công!');
+            } else {
+              errEl.innerText = (res && res.message) ? res.message : 'Đăng nhập thất bại!';
+            }
+          })
+          .withFailureHandler(function(err) {
+            btn.disabled = false;
+            btn.innerText = 'ĐĂNG NHẬP';
+            errEl.innerText = 'Lỗi kết nối máy chủ: ' + (err.message || err);
+          })
+          .loginUser(id, pass);
+      } else {
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.innerText = 'ĐĂNG NHẬP';
+          showToast('Đã lưu thông tin đăng nhập!');
+        }, 300);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      initSavedCredentialsUI();
+    });
+  </script>
 </body>
 </html>
