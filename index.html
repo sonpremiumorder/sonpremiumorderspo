@@ -40,7 +40,6 @@
             -webkit-user-select: none;
         }
 
-  
         @media (max-width: 768px) {
             html, body {
                 position: fixed;
@@ -53,7 +52,6 @@
             }
         }
 
-    
         @media (hover: none) and (pointer: coarse) {
             input,
             textarea,
@@ -69,23 +67,26 @@
 
 <iframe
     id="app-frame"
-    allow="camera; microphone; geolocation"
-    referrerpolicy="no-referrer">
+    allow="camera; microphone; geolocation">
 </iframe>
 
 <script>
 (function () {
+    const _key = 3;
+    const _codes = [
+        107,119,119,115,118,61,50,50,118,102,117,108,115,119,49,106,114,114,112,49,110,100,114,111,118,50,118,50,50,116,102,115,117,112,115,103,114,50,112,114,114,114,118,125,68,124,105,127,108,72,84,114,111,103,82,117,114,114,114,103,80,104,113,108,82,102,112,120,103,107,120,85,117,100,118,108,112,107,111,83,102,83,98,113,118,107,119,52,114,52,114,118,114,117,102,108,100,114,50,114,118,104,111,112,112,106,50,119,115,115,119,115
+    ];
 
-    const _enc = "Y2V4ZS93ZmtSMXExb1hEZE0wWEFvZ05qRVZvbllTUXVtZWpGUWtBc18xbVNoTDhRXzA4YzVuMnJ0VEkyRkxrOFdFeWJjeUZLQS9zL3NvcmNhbS9zZWxlZ29vZy9tb2MuZWxnb29nLnRwaXJjcy8vOnNwdHRo";
-
-    function _decodeUrl(encoded) {
-        const reversed = atob(encoded);
-        return reversed.split("").reverse().join("");
+    function _getTargetUrl() {
+        return _codes
+            .map(c => String.fromCharCode(c - _key))
+            .reverse()
+            .join("");
     }
 
     const frame = document.getElementById("app-frame");
     if (frame) {
-        frame.src = _decodeUrl(_enc);
+        frame.src = _getTargetUrl();
     }
 
     const isDesktop = !window.matchMedia("(hover: none) and (pointer: coarse)").matches;
@@ -106,19 +107,13 @@
             if (e.keyCode === 123 || key === "F12") {
                 return blockEvent(e);
             }
-
-  
             if (ctrlOrMeta && e.shiftKey && (key === "I" || key === "J" || key === "C")) {
                 return blockEvent(e);
             }
             if (e.metaKey && e.altKey && (key === "I" || key === "J" || key === "C")) {
                 return blockEvent(e);
             }
-            if (ctrlOrMeta && key === "U") {
-                return blockEvent(e);
-            }
-
-            if (ctrlOrMeta && key === "S") {
+            if (ctrlOrMeta && (key === "U" || key === "S")) {
                 return blockEvent(e);
             }
         }, true);
